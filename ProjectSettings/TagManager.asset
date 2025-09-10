@@ -7,6 +7,15 @@ TagManager:
   - Garbage
   - Medicine
   - Fire
+  - School
+  - B2
+  - Cement
+  - E46
+  - E61
+  - Escavator
+  - Police
+  - Digger
+  - Tractor
   layers:
   - Default
   - TransparentFX
