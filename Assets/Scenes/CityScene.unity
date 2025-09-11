@@ -2265,6 +2265,7 @@ GameObject:
   - component: {fileID: 1253061419}
   - component: {fileID: 1253061418}
   - component: {fileID: 1253061420}
+  - component: {fileID: 1253061421}
   m_Layer: 5
   m_Name: ScriptHolder
   m_TagString: Untagged
@@ -2288,6 +2289,15 @@ MonoBehaviour:
   - {fileID: 909382619}
   - {fileID: 1616503008}
   - {fileID: 1181329206}
+  - {fileID: 97456541}
+  - {fileID: 278530730}
+  - {fileID: 581882211}
+  - {fileID: 779070381}
+  - {fileID: 1817129469}
+  - {fileID: 1435300165}
+  - {fileID: 1830562337}
+  - {fileID: 441124156}
+  - {fileID: 1119844537}
   startCoordinates: []
   can: {fileID: 134409043}
   effects: {fileID: 11972480}
@@ -2297,6 +2307,15 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3fc68946a034a774486080e402331aed, type: 3}
   - {fileID: 8300000, guid: c81384609dad106409a6df5fdf366f61, type: 3}
   - {fileID: 8300000, guid: c6cb9af8fc749b9429ead253250aa7db, type: 3}
+  - {fileID: 8300000, guid: f49bdfd9095cf7a42b8b3e1b44992913, type: 3}
+  - {fileID: 8300000, guid: 28c60380e2808bb458c00b654344ca40, type: 3}
+  - {fileID: 8300000, guid: 540d1831a688ed7408b1417ffee52871, type: 3}
+  - {fileID: 8300000, guid: f49bdfd9095cf7a42b8b3e1b44992913, type: 3}
+  - {fileID: 8300000, guid: 28c60380e2808bb458c00b654344ca40, type: 3}
+  - {fileID: 8300000, guid: 5804b91ed761ee349b577f76266191ce, type: 3}
+  - {fileID: 8300000, guid: 34b63329f4f6a35489e5af5a01a794f6, type: 3}
+  - {fileID: 8300000, guid: 989dc0b13b6dcea40b386987a7ba1b8b, type: 3}
+  - {fileID: 8300000, guid: b6424a1361aa9f24bacdcdd1a90c7c18, type: 3}
   rightPlace: 0
   lastDragged: {fileID: 0}
 --- !u!224 &1253061419
@@ -2333,6 +2352,19 @@ MonoBehaviour:
   screenPoint: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   padding: 0.02
+--- !u!114 &1253061421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253061417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5946ba1ac016674882caea9f8768202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objScript: {fileID: 1253061418}
 --- !u!1 &1435300165
 GameObject:
   m_ObjectHideFlags: 0
