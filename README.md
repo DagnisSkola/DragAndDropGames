@@ -11,3 +11,7 @@ Unity 2D Drag and Drop games for children +6
 - [x] Add necessary sounds and audio sources
 - [ ] Create logic for winning
 - [ ] Create camera script for zoom-in/out and camera restrictions
+- [x] Create animated main menu with 3 buttons, sounds, animated objects
+- [x] Create C# script for scene change and quit option
+- [x] Create game timer
+- [x] Add animated clouds, vehicles, people, animals, etc.
