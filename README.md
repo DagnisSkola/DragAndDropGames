@@ -15,3 +15,4 @@ Unity 2D Drag and Drop games for children +6
 - [x] Create C# script for scene change and quit option
 - [x] Create game timer
 - [x] Add animated clouds, vehicles, people, animals, etc.
+- [ ] Add flyig obstacles in a city scene

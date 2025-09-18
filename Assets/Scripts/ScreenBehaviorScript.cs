@@ -4,7 +4,8 @@ public class ScreenBehaviorScript : MonoBehaviour
 {
     [HideInInspector]
     public Vector3 screenPoint, offset;
-    private float minX, maxX, minY, maxY;
+    [HideInInspector]
+    public float minX, maxX, minY, maxY;
     public float padding = 0.02f; // Padding from the screen edges
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
