@@ -11,11 +11,15 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
     public ObjectScript objectScr;
     public ScreenBehaviorScript screenBou;
 
+
     // Start is called before the first frame update
     void Start()
     {
         canvasGro = GetComponent<CanvasGroup>();
         rectTra = GetComponent<RectTransform>();
+
+        objectScr = Object.FindFirstObjectByType<ObjectScript>();
+        screenBou = Object.FindFirstObjectByType<ScreenBehaviorScript>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
