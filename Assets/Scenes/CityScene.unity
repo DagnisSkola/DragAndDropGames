@@ -1178,7 +1178,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 530
+  orthographic size: 700
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1221,7 +1221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b15825f71e696469f199390ca1e28c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxZoom: 300
+  maxZoom: 540
   minZoom: 150
   panSpeed: 6
   cam: {fileID: 519420031}
@@ -2021,6 +2021,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 989dc0b13b6dcea40b386987a7ba1b8b, type: 3}
   - {fileID: 8300000, guid: b6424a1361aa9f24bacdcdd1a90c7c18, type: 3}
   - {fileID: 8300000, guid: 551a5fd0487e2704aaf468cb7281f2c6, type: 3}
+  - {fileID: 8300000, guid: ae39a5bf138887a45a9b8608a3826ba1, type: 3}
   rightPlace: 0
 --- !u!224 &1253061419
 RectTransform:
@@ -2091,6 +2092,7 @@ MonoBehaviour:
   - {fileID: 6047011326879668077, guid: d6e90e705c052294cabb4d5569d34049, type: 3}
   - {fileID: 7732514072473409626, guid: b1fb5923afb56d340b5f4e0dcee66d68, type: 3}
   - {fileID: 7163641326748630045, guid: f120922d3db690f40bf7658e752851f8, type: 3}
+  - {fileID: 5026113994772588130, guid: bb6e9f48feb42eb4aa8ba5ea0950dc8a, type: 3}
   obstaclesPrefabs:
   - {fileID: 1707918367351696204, guid: c020b152b6a5bdc4e9af719f17528b26, type: 3}
   - {fileID: 3327116202597332386, guid: f8133de113633ad49bb2970ef95272cc, type: 3}
