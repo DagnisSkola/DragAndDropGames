@@ -56,10 +56,10 @@ public class ObstaclesControllerScript : MonoBehaviour
             StartCoroutine(FadeOutAndDestroy());
         }
 
-        //Ja pieskaras bumbai
+        //Ja neko nevelk un kursors pieskaras bumbai
         if(CompareTag("Bomb") && !isExploding && RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition, Camera.main))
         {
-            Debug.Log("Bomb hit by cursor");
+            Debug.Log("Bomb hit by cursor (without dragging)");
             TriggerExplosion();
         }
 
@@ -69,24 +69,20 @@ public class ObstaclesControllerScript : MonoBehaviour
             if(ObjectScript.lastDragged != null)
             {
                 StartCoroutine(ShrinkAndDestroy(ObjectScript.lastDragged, 0.5f));
+                ObjectScript.lastDragged = null;
                 ObjectScript.drag = false;
             }
-            StartCoroutine(FadeOutAndDestroy());
-            isFadingOut = true;
 
-            image.color = Color.cyan;
-            StartCoroutine(RecoverColor(0.3f));
-            StartCoroutine(Vibrate());
-            StartCoroutine(WaitBeforeExplode());
-
-            if(objectScript.effects != null && objectScript.audioCli != null)
+            if (CompareTag("Bomb"))
             {
-                objectScript.effects.PlayOneShot(objectScript.audioCli[14]);
+                StartToDestroy(Color.red);
+            }else{
+                StartToDestroy(Color.cyan);
             }
         }
     }
 
-    public void TriggerExplosion()
+public void TriggerExplosion()
     {
         isExploding = true;
         objectScript.effects.PlayOneShot(objectScript.audioCli[15], 5f);
@@ -126,20 +122,20 @@ public class ObstaclesControllerScript : MonoBehaviour
                 ObstaclesControllerScript obj = hit.GetComponent<ObstaclesControllerScript>();
                 if(obj != null && !obj.isExploding)
                 {
-                    obj.StartToDestroy();
+                    obj.StartToDestroy(Color.cyan);
                 }
             }
         }
     }
 
-    public void StartToDestroy()
+    public void StartToDestroy(Color c)
     {
         if (!isFadingOut)
         {
             StartCoroutine(FadeOutAndDestroy());
             isFadingOut = true;
 
-            image.color = Color.cyan;
+            image.color = c;
             StartCoroutine(RecoverColor(0.5f));
 
             StartCoroutine(Vibrate());
