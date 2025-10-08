@@ -10,9 +10,9 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
     private RectTransform rectTra;
     public ObjectScript objectScr;
     public ScreenBehaviorScript screenBou;
+    private WinConditionScript winCondition;
+    private bool hasBeenPlaced = false;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         canvasGro = GetComponent<CanvasGroup>();
@@ -20,6 +20,7 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
 
         objectScr = Object.FindFirstObjectByType<ObjectScript>();
         screenBou = Object.FindFirstObjectByType<ScreenBehaviorScript>();
+        winCondition = Object.FindFirstObjectByType<WinConditionScript>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -39,9 +40,9 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
             canvasGro.blocksRaycasts = false;
             canvasGro.alpha = 0.6f;
             // Pēdējais sarakstā
-                //rectTra.SetAsLastSibling();
+            //rectTra.SetAsLastSibling();
             // Pirmspēdējais
-                int positionIndex = transform.parent.childCount - 1;
+            int positionIndex = transform.parent.childCount - 1;
             int position = Mathf.Max(0, positionIndex - 1);
             transform.SetSiblingIndex(position);
             Vector3 cursorWorldPos = Camera.main.ScreenToWorldPoint(
@@ -80,7 +81,12 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
                 canvasGro.blocksRaycasts = false;
                 ObjectScript.lastDragged = null;
 
-
+                // Notify win condition if this is the first time placing this car
+                if (!hasBeenPlaced && winCondition != null)
+                {
+                    hasBeenPlaced = true;
+                    winCondition.CarPlacedSuccessfully();
+                }
             }
 
             objectScr.rightPlace = false;
