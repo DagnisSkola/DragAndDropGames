@@ -12,12 +12,14 @@ public class ObstaclesControllerScript : MonoBehaviour
     public float fadeDuration = 1.5f;
     private ObjectScript objectScript;
     private ScreenBehaviorScript screenBoundriesScript;
+    private WinConditionScript winCondition;
     private CanvasGroup canvasGroup;
     private RectTransform rectTransform;
     private bool isFadingOut = false;
     private bool isExploding = false;
     private Image image;
     private Color originalColor;
+
     void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -33,6 +35,7 @@ public class ObstaclesControllerScript : MonoBehaviour
 
         objectScript = Object.FindFirstObjectByType<ObjectScript>();
         screenBoundriesScript = Object.FindFirstObjectByType<ScreenBehaviorScript>();
+        winCondition = Object.FindFirstObjectByType<WinConditionScript>();
         StartCoroutine(FadeIn());
     }
 
@@ -43,7 +46,7 @@ public class ObstaclesControllerScript : MonoBehaviour
         rectTransform.anchoredPosition += new Vector2(-speed * Time.deltaTime, waveOffset * Time.deltaTime);
 
         //Iznīcinās ja lido pa kreisi
-        if(speed > 0 && transform.position.x < (screenBoundriesScript.minX + 80) && !isFadingOut)
+        if (speed > 0 && transform.position.x < (screenBoundriesScript.minX + 80) && !isFadingOut)
         {
             isFadingOut = true;
             StartCoroutine(FadeOutAndDestroy());
@@ -57,17 +60,23 @@ public class ObstaclesControllerScript : MonoBehaviour
         }
 
         //Ja neko nevelk un kursors pieskaras bumbai
-        if(CompareTag("Bomb") && !isExploding && RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition, Camera.main))
+        if (CompareTag("Bomb") && !isExploding && RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition, Camera.main))
         {
             Debug.Log("Bomb hit by cursor (without dragging)");
             TriggerExplosion();
         }
 
-        if(ObjectScript.drag && !isFadingOut && RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition, Camera.main))
+        if (ObjectScript.drag && !isFadingOut && RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition, Camera.main))
         {
             Debug.Log("Obstacle hit by drag");
-            if(ObjectScript.lastDragged != null)
+            if (ObjectScript.lastDragged != null)
             {
+                // Check if the dragged object is a car/vehicle before notifying
+                if (IsVehicle(ObjectScript.lastDragged))
+                {
+                    NotifyCarDestroyed();
+                }
+
                 StartCoroutine(ShrinkAndDestroy(ObjectScript.lastDragged, 0.5f));
                 ObjectScript.lastDragged = null;
                 ObjectScript.drag = false;
@@ -76,18 +85,39 @@ public class ObstaclesControllerScript : MonoBehaviour
             if (CompareTag("Bomb"))
             {
                 StartToDestroy(Color.red);
-            }else{
+            }
+            else
+            {
                 StartToDestroy(Color.cyan);
             }
         }
     }
 
-public void TriggerExplosion()
+    // Check if a GameObject is a vehicle based on its tag
+    bool IsVehicle(GameObject obj)
+    {
+        string tag = obj.tag;
+        return tag == "Garbage" || tag == "Medicine" || tag == "Fire" ||
+               tag == "School" || tag == "B2" || tag == "Cement" ||
+               tag == "E46" || tag == "E61" || tag == "Escavator" ||
+               tag == "Police" || tag == "Digger" || tag == "Tractor";
+    }
+
+    // Notify the win condition script that a car was destroyed
+    void NotifyCarDestroyed()
+    {
+        if (winCondition != null)
+        {
+            winCondition.CarDestroyed();
+        }
+    }
+
+    public void TriggerExplosion()
     {
         isExploding = true;
         objectScript.effects.PlayOneShot(objectScript.audioCli[15], 5f);
 
-        if(TryGetComponent<Animator>(out Animator animator))
+        if (TryGetComponent<Animator>(out Animator animator))
         {
             animator.SetBool("explode", true);
         }
@@ -101,7 +131,7 @@ public void TriggerExplosion()
     IEnumerator WaitBeforeExplode()
     {
         float radius = 0;
-        if(TryGetComponent<CircleCollider2D>(out CircleCollider2D circleCollider))
+        if (TryGetComponent<CircleCollider2D>(out CircleCollider2D circleCollider))
         {
             radius = circleCollider.radius * transform.lossyScale.x;
             ExplodeAndDestroyNearbyObjects(radius);
@@ -120,9 +150,17 @@ public void TriggerExplosion()
             if (hit != null && hit.gameObject != gameObject)
             {
                 ObstaclesControllerScript obj = hit.GetComponent<ObstaclesControllerScript>();
-                if(obj != null && !obj.isExploding)
+                if (obj != null && !obj.isExploding)
                 {
                     obj.StartToDestroy(Color.cyan);
+                }
+
+                // Check if it's a vehicle that got caught in the explosion
+                DragAndDropScript dragScript = hit.GetComponent<DragAndDropScript>();
+                if (dragScript != null && IsVehicle(hit.gameObject))
+                {
+                    NotifyCarDestroyed();
+                    StartCoroutine(ShrinkAndDestroy(hit.gameObject, 0.5f));
                 }
             }
         }
@@ -142,6 +180,7 @@ public void TriggerExplosion()
             objectScript.effects.PlayOneShot(objectScript.audioCli[14]);
         }
     }
+
     IEnumerator FadeIn()
     {
         float a = 0f;
@@ -173,11 +212,13 @@ public void TriggerExplosion()
 
     IEnumerator ShrinkAndDestroy(GameObject target, float duration)
     {
+        if (target == null) yield break;
+
         Vector3 originalScale = target.transform.localScale;
         Quaternion originalRotation = target.transform.rotation;
         float t = 0f;
 
-        while(t < duration)
+        while (t < duration && target != null)
         {
             t += Time.deltaTime;
             target.transform.localScale = Vector3.Lerp(originalScale, Vector3.zero, t / duration);
@@ -186,9 +227,11 @@ public void TriggerExplosion()
 
             yield return null;
         }
-        //Ko darit ar mašīnu tālāk?
-        // Nav obligāti jaiznīcina, varbūt jāatgriež pozīcijā?
-        Destroy(target);
+
+        if (target != null)
+        {
+            Destroy(target);
+        }
     }
 
     IEnumerator RecoverColor(float seconds)
@@ -204,7 +247,7 @@ public void TriggerExplosion()
         float elpased = 0f;
         float intensity = 5f;
 
-        while(elpased < duration)
+        while (elpased < duration)
         {
             rectTransform.anchoredPosition = originalPosition + Random.insideUnitCircle * intensity;
             elpased += Time.deltaTime;

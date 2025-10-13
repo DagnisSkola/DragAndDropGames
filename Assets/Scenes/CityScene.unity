@@ -323,7 +323,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -118, y: -70}
+  m_AnchoredPosition: {x: -137.59998, y: -70}
   m_SizeDelta: {x: 200, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &34721384
@@ -958,7 +958,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 118, y: -70}
+  m_AnchoredPosition: {x: 139.29004, y: -70}
   m_SizeDelta: {x: 200, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &301039149
@@ -2815,9 +2815,9 @@ MonoBehaviour:
   starFilled: {fileID: 4815476061570213978, guid: 83477606af60da44c925787a43c85bc9, type: 3}
   starEmpty: {fileID: -4770869783394947156, guid: 78b8af62b827f6d4c9045abd0ee81705, type: 3}
   threeStarThreshold: 12
-  twoStarThreshold: 9
-  oneStarThreshold: 2
-  totalCarsToPlace: 2
+  twoStarThreshold: 8
+  oneStarThreshold: 4
+  totalCarsToPlace: 12
 --- !u!1 &1318059794
 GameObject:
   m_ObjectHideFlags: 0
@@ -3087,7 +3087,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -105.54, y: 26.465}
+  m_AnchoredPosition: {x: -137.6, y: 25}
   m_SizeDelta: {x: 224.9123, y: 52.9309}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1405575140
@@ -3924,8 +3924,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 176.79, y: 25}
-  m_SizeDelta: {x: 317.5747, y: 50}
+  m_AnchoredPosition: {x: 139.29004, y: 25}
+  m_SizeDelta: {x: 278.5807, y: 44.4294}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1857239009
 CanvasRenderer:
@@ -3957,8 +3957,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Cars Placed: 0/12'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 02104b404be74804b824148dcac46d44, type: 2}
+  m_sharedMaterial: {fileID: -6815196224204862879, guid: 02104b404be74804b824148dcac46d44, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3982,8 +3982,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

@@ -26,7 +26,7 @@ public class WinConditionScript : MonoBehaviour
     public int totalCarsToPlace = 12;
 
     private int carsPlacedSuccessfully = 0;
-    private int totalCarsAttempted = 0;
+    private int carsDestroyed = 0;
     private bool gameWon = false;
 
     void Start()
@@ -56,23 +56,31 @@ public class WinConditionScript : MonoBehaviour
         if (gameWon) return;
 
         carsPlacedSuccessfully++;
-        totalCarsAttempted++;
         Debug.Log($"Cars placed successfully: {carsPlacedSuccessfully}/{totalCarsToPlace}");
 
         CheckWinCondition();
     }
 
-    // Call this when a car is attempted but not placed correctly (optional tracking)
-    public void CarAttempted()
+    // NEW: Call this when a car is destroyed by an obstacle
+    public void CarDestroyed()
     {
         if (gameWon) return;
-        totalCarsAttempted++;
+
+        carsDestroyed++;
+        Debug.Log($"Car destroyed! Total destroyed: {carsDestroyed}");
+
+        CheckWinCondition();
     }
 
     void CheckWinCondition()
     {
-        // Check if all possible cars have been attempted (win or lose scenario)
-        if (totalCarsAttempted >= totalCarsToPlace)
+        // Calculate how many cars are still available to place
+        int remainingCars = totalCarsToPlace - carsPlacedSuccessfully - carsDestroyed;
+
+        Debug.Log($"Placed: {carsPlacedSuccessfully}, Destroyed: {carsDestroyed}, Remaining: {remainingCars}");
+
+        // If all cars are either placed or destroyed, end the game
+        if (remainingCars <= 0)
         {
             TriggerGameEnd();
         }
@@ -83,7 +91,7 @@ public class WinConditionScript : MonoBehaviour
         if (gameWon) return;
 
         gameWon = true;
-        Debug.Log($"Game Over! Cars placed: {carsPlacedSuccessfully}/{totalCarsToPlace}");
+        Debug.Log($"Game Over! Cars placed: {carsPlacedSuccessfully}/{totalCarsToPlace}, Destroyed: {carsDestroyed}");
 
         // Stop the timer
         if (timerScript != null)
