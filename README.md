@@ -21,7 +21,7 @@ DragAndDropGames is an educational game series that teaches children problem-sol
 - Immersive sound effects and audio feedback
 - Responsive main menu with navigation options
 
-## 📋 Current Features
+## 📋 To do
 
 - [x] Create the necessary folders
 - [x] Add necessary assets
