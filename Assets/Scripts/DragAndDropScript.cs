@@ -12,6 +12,8 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
     public ScreenBehaviorScript screenBou;
     private WinConditionScript winCondition;
     private bool hasBeenPlaced = false;
+    private bool shouldResetPosition = false;
+    private Vector2 resetToPosition;
 
     void Start()
     {
@@ -36,6 +38,7 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
     {
         if (Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !Input.GetMouseButton(2))
         {
+            shouldResetPosition = false;
             ObjectScript.drag = true;
             canvasGro.blocksRaycasts = false;
             canvasGro.alpha = 0.6f;
@@ -76,7 +79,14 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
             canvasGro.blocksRaycasts = true;
             canvasGro.alpha = 1.0f;
 
-            if (objectScr.rightPlace)
+            // Check if we need to reset position (set by DropPlaceScript)
+            if (shouldResetPosition)
+            {
+                Debug.Log("Resetting position in OnEndDrag to: " + resetToPosition);
+                rectTra.anchoredPosition = resetToPosition;
+                shouldResetPosition = false;
+            }
+            else if (objectScr.rightPlace)
             {
                 canvasGro.blocksRaycasts = false;
                 ObjectScript.lastDragged = null;
@@ -91,5 +101,13 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
 
             objectScr.rightPlace = false;
         }
+    }
+
+    // Call this from DropPlaceScript when wrong placement detected
+    public void RequestPositionReset(Vector2 position)
+    {
+        shouldResetPosition = true;
+        resetToPosition = position;
+        Debug.Log("Position reset requested to: " + position);
     }
 }

@@ -19,12 +19,14 @@ public class ObjectScript : MonoBehaviour
     void Awake()
     {
         startCoordinates = new Vector2[vehicles.Length];
-        Debug.Log(vehicles.Length);
-        Debug.Log(startCoordinates.Length);
+        Debug.Log("Total vehicles: " + vehicles.Length);
+        Debug.Log("Start coordinates array length: " + startCoordinates.Length);
+
         for (int i = 0; i < vehicles.Length; i++)
         {
-            startCoordinates[i] = vehicles[i].GetComponent<RectTransform>().localPosition;
-            Debug.Log(vehicles[i].GetComponent<RectTransform>().localPosition);
+            // Store anchoredPosition instead of localPosition for UI elements
+            startCoordinates[i] = vehicles[i].GetComponent<RectTransform>().anchoredPosition;
+            Debug.Log($"Vehicle {i} ({vehicles[i].name}) start position: {startCoordinates[i]}");
         }
     }
 }

@@ -8,8 +8,6 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler
     private float xSizeDiff, ySizeDiff;
     public ObjectScript objScript;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void OnDrop(PointerEventData eventData)
     {
         if ((eventData.pointerDrag != null) &&
@@ -17,12 +15,8 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler
         {
             if (eventData.pointerDrag.tag.Equals(tag))
             {
-                placeZRot =
-                     eventData.pointerDrag.GetComponent<RectTransform>().transform.eulerAngles.z;
-
-                vehicleZRot =
-                    GetComponent<RectTransform>().transform.eulerAngles.z;
-
+                placeZRot = eventData.pointerDrag.GetComponent<RectTransform>().transform.eulerAngles.z;
+                vehicleZRot = GetComponent<RectTransform>().transform.eulerAngles.z;
                 rotDiff = Mathf.Abs(placeZRot - vehicleZRot);
                 Debug.Log("Rotation difference: " + rotDiff);
 
@@ -85,54 +79,69 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler
                             break;
                     }
                 }
-
+                else
+                {
+                    // Same tag but wrong rotation/size - reset position
+                    Debug.Log("Wrong rotation/size - resetting position");
+                    objScript.rightPlace = false;
+                    objScript.effects.PlayOneShot(objScript.audioCli[1]);
+                    ResetVehiclePosition(eventData.pointerDrag.tag);
+                }
             }
             else
             {
+                // Wrong tag entirely - reset position
+                Debug.Log("Wrong tag - resetting position");
                 objScript.rightPlace = false;
                 objScript.effects.PlayOneShot(objScript.audioCli[1]);
+                ResetVehiclePosition(eventData.pointerDrag.tag);
+            }
+        }
+    }
 
-                switch (eventData.pointerDrag.tag)
+    void ResetVehiclePosition(string vehicleTag)
+    {
+        int vehicleIndex = -1;
+
+        switch (vehicleTag)
+        {
+            case "Garbage": vehicleIndex = 0; break;
+            case "Medicine": vehicleIndex = 1; break;
+            case "Fire": vehicleIndex = 2; break;
+            case "School": vehicleIndex = 3; break;
+            case "B2": vehicleIndex = 4; break;
+            case "Cement": vehicleIndex = 5; break;
+            case "E46": vehicleIndex = 6; break;
+            case "E61": vehicleIndex = 7; break;
+            case "Escavator": vehicleIndex = 8; break;
+            case "Police": vehicleIndex = 9; break;
+            case "Digger": vehicleIndex = 10; break;
+            case "Tractor": vehicleIndex = 11; break;
+            default:
+                Debug.Log("Unknown tag detected: " + vehicleTag);
+                return;
+        }
+
+        if (vehicleIndex >= 0 && vehicleIndex < objScript.vehicles.Length)
+        {
+            GameObject vehicle = objScript.vehicles[vehicleIndex];
+            Vector2 startPos = objScript.startCoordinates[vehicleIndex];
+
+            Debug.Log($"Resetting {vehicleTag} to position: {startPos}");
+
+            // Request the DragAndDropScript to reset position after OnEndDrag
+            DragAndDropScript dragScript = vehicle.GetComponent<DragAndDropScript>();
+            if (dragScript != null)
+            {
+                dragScript.RequestPositionReset(startPos);
+            }
+            else
+            {
+                // Fallback: set directly
+                RectTransform rt = vehicle.GetComponent<RectTransform>();
+                if (rt != null)
                 {
-                    case "Garbage":
-                        objScript.vehicles[0].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[0];
-                        break;
-                    case "Medicine":
-                        objScript.vehicles[1].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[1];
-                        break;
-                    case "Fire":
-                        objScript.vehicles[2].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[2];
-                        break;
-                    case "School":
-                        objScript.vehicles[3].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[3];
-                        break;
-                    case "B2":
-                        objScript.vehicles[4].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[4];
-                        break;
-                    case "Cement":
-                        objScript.vehicles[5].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[5];
-                        break;
-                    case "E46":
-                        objScript.vehicles[6].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[6];
-                        break;
-                    case "E61":
-                        objScript.vehicles[7].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[7];
-                        break;
-                    case "Escavator":
-                        objScript.vehicles[8].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[8];
-                        break;
-                    case "Police":
-                        objScript.vehicles[9].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[9];
-                        break;
-                    case "Digger":
-                        objScript.vehicles[10].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[10];
-                        break;
-                    case "Tractor":
-                        objScript.vehicles[11].GetComponent<RectTransform>().localPosition = objScript.startCoordinates[11];
-                        break;
-                    default:
-                        Debug.Log("Unknown tag detected");
-                        break;
+                    rt.anchoredPosition = startPos;
                 }
             }
         }
