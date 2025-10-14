@@ -15,6 +15,9 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
     private bool shouldResetPosition = false;
     private Vector2 resetToPosition;
 
+    [HideInInspector]
+    public Vector2 originalStartPosition;
+
     void Start()
     {
         canvasGro = GetComponent<CanvasGroup>();
@@ -23,6 +26,16 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
         objectScr = Object.FindFirstObjectByType<ObjectScript>();
         screenBou = Object.FindFirstObjectByType<ScreenBehaviorScript>();
         winCondition = Object.FindFirstObjectByType<WinConditionScript>();
+
+        // Store the starting position AFTER spawning
+        StartCoroutine(LateStart());
+    }
+
+    IEnumerator LateStart()
+    {
+        yield return new WaitForEndOfFrame();
+        originalStartPosition = rectTra.anchoredPosition;
+        Debug.Log($"{gameObject.name} stored start position: {originalStartPosition}");
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -42,19 +55,18 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
             ObjectScript.drag = true;
             canvasGro.blocksRaycasts = false;
             canvasGro.alpha = 0.6f;
-            // Pēdējais sarakstā
-            //rectTra.SetAsLastSibling();
-            // Pirmspēdējais
+
             int positionIndex = transform.parent.childCount - 1;
             int position = Mathf.Max(0, positionIndex - 1);
             transform.SetSiblingIndex(position);
+
             Vector3 cursorWorldPos = Camera.main.ScreenToWorldPoint(
                 new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenBou.screenPoint.z));
             rectTra.position = cursorWorldPos;
 
             screenBou.screenPoint = Camera.main.WorldToScreenPoint(rectTra.localPosition);
-
-            screenBou.offset = rectTra.localPosition - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenBou.screenPoint.z));
+            screenBou.offset = rectTra.localPosition - Camera.main.ScreenToWorldPoint(
+                new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenBou.screenPoint.z));
 
             ObjectScript.lastDragged = eventData.pointerDrag;
         }
@@ -64,8 +76,7 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
     {
         if (Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !Input.GetMouseButton(2))
         {
-            Vector3 curSreenPoint =
-                new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenBou.screenPoint.z);
+            Vector3 curSreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenBou.screenPoint.z);
             Vector3 curPosition = Camera.main.ScreenToWorldPoint(curSreenPoint) + screenBou.offset;
             rectTra.position = screenBou.getClampedPosition(curPosition);
         }
@@ -79,10 +90,10 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
             canvasGro.blocksRaycasts = true;
             canvasGro.alpha = 1.0f;
 
-            // Check if we need to reset position (set by DropPlaceScript)
+            // Check if we need to reset position
             if (shouldResetPosition)
             {
-                Debug.Log("Resetting position in OnEndDrag to: " + resetToPosition);
+                Debug.Log($"Resetting {gameObject.name} to position: {resetToPosition}");
                 rectTra.anchoredPosition = resetToPosition;
                 shouldResetPosition = false;
             }
@@ -108,6 +119,5 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
     {
         shouldResetPosition = true;
         resetToPosition = position;
-        Debug.Log("Position reset requested to: " + position);
     }
 }
