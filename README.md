@@ -40,7 +40,7 @@ DragAndDropGames is an educational game series that teaches children problem-sol
 
 ## 🎯 Gameplay Example
 
-![[City Scene Parking Challenge](https://cdn.discordapp.com/attachments/668518956390285335/1427805735940526213/image.png?ex=68f03336&is=68eee1b6&hm=4b9381380c0801c423b3b7a7e72089bd27a8eac9d36c464a7e554dcd059b4438&)](Image2)
+![City Scene Parking Challenge](https://cdn.discordapp.com/attachments/668518956390285335/1427805735940526213/image.png?ex=68f03336&is=68eee1b6&hm=4b9381380c0801c423b3b7a7e72089bd27a8eac9d36c464a7e554dcd059b4438&)
 
 Players navigate a busy city scene, parking vehicles at their designated spots while avoiding moving obstacles that can destroy their vehicles.
 
