@@ -11,11 +11,11 @@ public class TransfomationScript : MonoBehaviour
             // Rotation controls
             if (Input.GetKey(KeyCode.Z))
             {
-                ObjectScript.lastDragged.GetComponent<RectTransform>().transform.Rotate(0, 0, Time.deltaTime * 15f);
+                ObjectScript.lastDragged.GetComponent<RectTransform>().transform.Rotate(0, 0, Time.deltaTime * 30f);
             }
             if (Input.GetKey(KeyCode.X))
             {
-                ObjectScript.lastDragged.GetComponent<RectTransform>().transform.Rotate(0, 0, Time.deltaTime * -15f);
+                ObjectScript.lastDragged.GetComponent<RectTransform>().transform.Rotate(0, 0, Time.deltaTime * -30f);
             }
 
             // Get current scale

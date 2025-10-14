@@ -14,6 +14,9 @@ public class CarSpawner : MonoBehaviour
     public string sortingLayerName = "Cars";
     public int sortingOrder = 10;
 
+    [Header("Scale Options")]
+    public bool applyScale = true;
+
     void Start()
     {
         SpawnCars();
@@ -53,6 +56,9 @@ public class CarSpawner : MonoBehaviour
 
             GameObject inst = Instantiate(cars[i], pos, rot, spawnPoint);
 
+            // Apply scale based on spawn point
+            ApplyScale(inst, spawnPoint.name);
+
             if (setSortingLayer)
             {
                 SpriteRenderer sr = inst.GetComponent<SpriteRenderer>();
@@ -79,6 +85,8 @@ public class CarSpawner : MonoBehaviour
         float offsetX = 0f;
         float offsetY = 0f;
         float offsetRotZ = 0f;
+        float scaleX = 1f;
+        float scaleY = 1f;
 
         switch (spawnPointName)
         {
@@ -86,61 +94,85 @@ public class CarSpawner : MonoBehaviour
                 offsetX = -470f;
                 offsetY = -402f;
                 offsetRotZ = 5f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint2":
                 offsetX = -659f;
                 offsetY = -123f;
                 offsetRotZ = -23f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint3":
                 offsetX = -899f;
                 offsetY = 130f;
                 offsetRotZ = 23f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint4":
                 offsetX = 901f;
                 offsetY = -267f;
                 offsetRotZ = 90f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint5":
                 offsetX = 278f;
                 offsetY = 0f;
                 offsetRotZ = 23f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint6":
                 offsetX = -490f;
                 offsetY = -187f;
                 offsetRotZ = -23f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint7":
                 offsetX = 849f;
                 offsetY = 225f;
                 offsetRotZ = 34f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint8":
                 offsetX = 646f;
                 offsetY = 80f;
                 offsetRotZ = 180f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint9":
                 offsetX = 404f;
                 offsetY = -43f;
                 offsetRotZ = 223f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint10":
                 offsetX = 222f;
                 offsetY = 91f;
                 offsetRotZ = 223f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint11":
                 offsetX = -69f;
                 offsetY = 249f;
                 offsetRotZ = 223f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             case "SpawnPoint12":
                 offsetX = -894f;
                 offsetY = -387f;
                 offsetRotZ = 223f;
+                scaleX = 1f;
+                scaleY = 1f;
                 break;
             default:
                 // No offset
@@ -153,5 +185,73 @@ public class CarSpawner : MonoBehaviour
         Vector3 euler = rot.eulerAngles;
         euler.z += offsetRotZ;
         rot = Quaternion.Euler(euler);
+    }
+
+    void ApplyScale(GameObject inst, string spawnPointName)
+    {
+        float scaleX = 0.65f;
+        float scaleY = 0.65f;
+
+        switch (spawnPointName)
+        {
+            case "SpawnPoint1":
+                scaleX = 0.62f;
+                scaleY = 0.63f;
+                break;
+            case "SpawnPoint2":
+                scaleX = 0.68f;
+                scaleY = 0.65f;
+                break;
+            case "SpawnPoint3":
+                scaleX = 0.64f;
+                scaleY = 0.67f;
+                break;
+            case "SpawnPoint4":
+                scaleX = 0.66f;
+                scaleY = 0.64f;
+                break;
+            case "SpawnPoint5":
+                scaleX = 0.63f;
+                scaleY = 0.66f;
+                break;
+            case "SpawnPoint6":
+                scaleX = 0.67f;
+                scaleY = 0.62f;
+                break;
+            case "SpawnPoint7":
+                scaleX = 0.65f;
+                scaleY = 0.68f;
+                break;
+            case "SpawnPoint8":
+                scaleX = 0.69f;
+                scaleY = 0.64f;
+                break;
+            case "SpawnPoint9":
+                scaleX = 0.61f;
+                scaleY = 0.65f;
+                break;
+            case "SpawnPoint10":
+                scaleX = 0.66f;
+                scaleY = 0.66f;
+                break;
+            case "SpawnPoint11":
+                scaleX = 0.64f;
+                scaleY = 0.63f;
+                break;
+            case "SpawnPoint12":
+                scaleX = 0.68f;
+                scaleY = 0.67f;
+                break;
+            default:
+                break;
+        }
+
+        if (applyScale)
+        {
+            Vector3 scale = inst.transform.localScale;
+            scale.x = scaleX;
+            scale.y = scaleY;
+            inst.transform.localScale = scale;
+        }
     }
 }
