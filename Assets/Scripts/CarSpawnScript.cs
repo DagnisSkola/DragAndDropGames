@@ -195,40 +195,40 @@ public class CarSpawner : MonoBehaviour
         switch (spawnPointName)
         {
             case "SpawnPoint1":
-                scaleX = 0.62f;
-                scaleY = 0.63f;
+                scaleX = 0.72f;
+                scaleY = 0.83f;
                 break;
             case "SpawnPoint2":
-                scaleX = 0.68f;
-                scaleY = 0.65f;
+                scaleX = 0.48f;
+                scaleY = 0.85f;
                 break;
             case "SpawnPoint3":
-                scaleX = 0.64f;
-                scaleY = 0.67f;
+                scaleX = 0.24f;
+                scaleY = 0.47f;
                 break;
             case "SpawnPoint4":
-                scaleX = 0.66f;
-                scaleY = 0.64f;
+                scaleX = 0.86f;
+                scaleY = 0.74f;
                 break;
             case "SpawnPoint5":
-                scaleX = 0.63f;
+                scaleX = 0.53f;
                 scaleY = 0.66f;
                 break;
             case "SpawnPoint6":
                 scaleX = 0.67f;
-                scaleY = 0.62f;
+                scaleY = 0.82f;
                 break;
             case "SpawnPoint7":
-                scaleX = 0.65f;
-                scaleY = 0.68f;
+                scaleX = 0.85f;
+                scaleY = 0.78f;
                 break;
             case "SpawnPoint8":
-                scaleX = 0.69f;
-                scaleY = 0.64f;
+                scaleX = 0.49f;
+                scaleY = 0.34f;
                 break;
             case "SpawnPoint9":
-                scaleX = 0.61f;
-                scaleY = 0.65f;
+                scaleX = 0.51f;
+                scaleY = 0.55f;
                 break;
             case "SpawnPoint10":
                 scaleX = 0.66f;
@@ -239,8 +239,8 @@ public class CarSpawner : MonoBehaviour
                 scaleY = 0.63f;
                 break;
             case "SpawnPoint12":
-                scaleX = 0.68f;
-                scaleY = 0.67f;
+                scaleX = 0.88f;
+                scaleY = 0.77f;
                 break;
             default:
                 break;

@@ -24,8 +24,8 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler
                 xSizeDiff = Mathf.Abs(placeSiz.x - vehicleSiz.x);
                 ySizeDiff = Mathf.Abs(placeSiz.y - vehicleSiz.y);
 
-                if ((rotDiff <= 5 || (rotDiff >= 355 && rotDiff <= 360)) &&
-                    (xSizeDiff <= 0.05 && ySizeDiff <= 0.05))
+                if ((rotDiff <= 5 || (rotDiff >= 350 && rotDiff <= 360)) &&
+                    (xSizeDiff <= 0.1 && ySizeDiff <= 0.1))
                 {
                     Debug.Log("Correct place");
                     objScript.rightPlace = true;
