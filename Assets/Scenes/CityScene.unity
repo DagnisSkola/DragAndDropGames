@@ -662,6 +662,7 @@ RectTransform:
   - {fileID: 397099447}
   - {fileID: 53074406}
   - {fileID: 893220684}
+  - {fileID: 1950451405}
   - {fileID: 144971729}
   - {fileID: 970045809}
   - {fileID: 1774261192}
@@ -674,7 +675,6 @@ RectTransform:
   - {fileID: 36209397}
   - {fileID: 1160476255}
   - {fileID: 39433614}
-  - {fileID: 1950451405}
   - {fileID: 778411291}
   - {fileID: 32819790}
   - {fileID: 1522917516}
