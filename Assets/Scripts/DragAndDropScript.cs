@@ -27,14 +27,14 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
         canvasGro = GetComponent<CanvasGroup>();
         rectTra = GetComponent<RectTransform>();
 
-        if(objectScr == null)
+        if (objectScr == null)
         {
             objectScr = Object.FindFirstObjectByType<ObjectScript>();
         }
 
         if (screenBou == null)
         {
-            screenBou = GetComponent<ScreenBehaviorScript>();
+            screenBou = Object.FindFirstObjectByType<ScreenBehaviorScript>();
         }
 
         canvas = GetComponentInParent<Canvas>();
@@ -86,7 +86,7 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
         transform.SetSiblingIndex(position);
 
         Vector3 pointerWorld;
-        if(ScreenPointToWorld(eventData.position, out pointerWorld))    
+        if (ScreenPointToWorld(eventData.position, out pointerWorld))
         {
             dragOffsetWorld = rectTra.position - pointerWorld;
         }
@@ -113,31 +113,31 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
 
     public void OnEndDrag(PointerEventData eventData)
     {
-            ObjectScript.drag = false;
-            canvasGro.blocksRaycasts = true;
-            canvasGro.alpha = 1.0f;
+        ObjectScript.drag = false;
+        canvasGro.blocksRaycasts = true;
+        canvasGro.alpha = 1.0f;
 
-            // Check if we need to reset position
-            if (shouldResetPosition)
+        // Check if we need to reset position
+        if (shouldResetPosition)
+        {
+            Debug.Log($"Resetting {gameObject.name} to position: {resetToPosition}");
+            rectTra.anchoredPosition = resetToPosition;
+            shouldResetPosition = false;
+        }
+        else if (objectScr.rightPlace)
+        {
+            canvasGro.blocksRaycasts = false;
+            ObjectScript.lastDragged = null;
+
+            // Notify win condition if this is the first time placing this car
+            if (!hasBeenPlaced && winCondition != null)
             {
-                Debug.Log($"Resetting {gameObject.name} to position: {resetToPosition}");
-                rectTra.anchoredPosition = resetToPosition;
-                shouldResetPosition = false;
+                hasBeenPlaced = true;
+                winCondition.CarPlacedSuccessfully();
             }
-            else if (objectScr.rightPlace)
-            {
-                canvasGro.blocksRaycasts = false;
-                ObjectScript.lastDragged = null;
+        }
 
-                // Notify win condition if this is the first time placing this car
-                if (!hasBeenPlaced && winCondition != null)
-                {
-                    hasBeenPlaced = true;
-                    winCondition.CarPlacedSuccessfully();
-                }
-            }
-
-            objectScr.rightPlace = false;
+        objectScr.rightPlace = false;
     }
 
     // Call this from DropPlaceScript when wrong placement detected
@@ -147,13 +147,30 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
         resetToPosition = position;
     }
 
+    // FIXED: Properly convert screen point to world point
     private bool ScreenPointToWorld(Vector2 screenPoint, out Vector3 worldPoint)
     {
         worldPoint = Vector3.zero;
-        if (uiCamera == null)
+
+        if (canvas == null)
             return false;
-        float z = Mathf.Abs(uiCamera.transform.position.z - transform.position.z);
-        Vector2 sp = new Vector3(screenPoint.x, screenPoint.y, z);
-        return true;
+
+        if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+        {
+            // For overlay canvas, screen position is directly the world position
+            worldPoint = screenPoint;
+            worldPoint.z = transform.position.z;
+            return true;
+        }
+        else if (uiCamera != null)
+        {
+            // For camera canvas, convert screen point to world point
+            float z = Mathf.Abs(uiCamera.transform.position.z - transform.position.z);
+            Vector3 sp = new Vector3(screenPoint.x, screenPoint.y, z);
+            worldPoint = uiCamera.ScreenToWorldPoint(sp);
+            return true;
+        }
+
+        return false;
     }
 }
