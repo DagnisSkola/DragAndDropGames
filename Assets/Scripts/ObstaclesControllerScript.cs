@@ -19,6 +19,8 @@ public class ObstaclesControllerScript : MonoBehaviour
     private bool isExploding = false;
     private Image image;
     private Color originalColor;
+    private Canvas canvas;
+    private Camera uiCamera;
 
     void Start()
     {
@@ -31,15 +33,30 @@ public class ObstaclesControllerScript : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
 
         image = GetComponent<Image>();
-        originalColor = image.color;
+        if (image != null)
+        {
+            originalColor = image.color;
+        }
 
         objectScript = Object.FindFirstObjectByType<ObjectScript>();
         screenBoundriesScript = Object.FindFirstObjectByType<ScreenBehaviorScript>();
         winCondition = Object.FindFirstObjectByType<WinConditionScript>();
+
+        // Get the canvas and its camera
+        canvas = GetComponentInParent<Canvas>();
+        if (canvas != null)
+        {
+            uiCamera = canvas.worldCamera;
+            Debug.Log($"Canvas Render Mode: {canvas.renderMode}, Camera: {(uiCamera != null ? uiCamera.name : "null")}");
+        }
+        else
+        {
+            Debug.LogError("Canvas not found for ObstaclesControllerScript!");
+        }
+
         StartCoroutine(FadeIn());
     }
 
-    // Update is called once per frame
     void Update()
     {
         float waveOffset = Mathf.Sin(Time.time * waveFrequency) * waveAmplitude;
@@ -65,14 +82,53 @@ public class ObstaclesControllerScript : MonoBehaviour
         {
             return;
         }
-        //////////////////
-        if (CompareTag("Bomb") && !isExploding && RectTransformUtility.RectangleContainsScreenPoint(rectTransform, inputPosition, Camera.main))
+
+        // Validate input position
+        if (float.IsInfinity(inputPosition.x) || float.IsInfinity(inputPosition.y) ||
+            float.IsNaN(inputPosition.x) || float.IsNaN(inputPosition.y))
+        {
+            Debug.LogWarning($"Invalid input position: {inputPosition}");
+            return;
+        }
+
+        // Use the correct camera for UI raycasting
+        Camera raycastCamera = null;
+        if (canvas != null)
+        {
+            if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            {
+                raycastCamera = null; // Overlay uses screen coordinates directly
+            }
+            else
+            {
+                raycastCamera = uiCamera; // Camera or World Space uses the assigned camera
+            }
+        }
+
+        // Additional check: make sure rectTransform is valid
+        if (rectTransform == null || !rectTransform.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
+        bool isOverObstacle = false;
+        try
+        {
+            isOverObstacle = RectTransformUtility.RectangleContainsScreenPoint(rectTransform, inputPosition, raycastCamera);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Error in RectangleContainsScreenPoint: {e.Message}");
+            return;
+        }
+
+        if (CompareTag("Bomb") && !isExploding && isOverObstacle)
         {
             Debug.Log("Bomb hit by cursor (without dragging)");
             TriggerExplosion();
         }
 
-        if (ObjectScript.drag && !isFadingOut && RectTransformUtility.RectangleContainsScreenPoint(rectTransform, inputPosition, Camera.main))
+        if (ObjectScript.drag && !isFadingOut && isOverObstacle)
         {
             Debug.Log("Obstacle hit by drag");
             if (ObjectScript.lastDragged != null)
@@ -120,11 +176,11 @@ public class ObstaclesControllerScript : MonoBehaviour
 
     bool TryGetInputPosition(out Vector2 position)
     {
-        #if UNITY_EDITOR || UNITY_STANDALONE
-                position = Input.mousePosition;
-                return true;
+#if UNITY_EDITOR || UNITY_STANDALONE
+        position = Input.mousePosition;
+        return true;
 
-        #elif UNITY_ANDROID
+#elif UNITY_ANDROID
                     if(Input.touchCount > 0)
                     {
                         position = Input.GetTouch(0).position;
@@ -135,22 +191,32 @@ public class ObstaclesControllerScript : MonoBehaviour
                         position = Vector2.zero;
                         return false;
                     }
-        #endif
+#else
+                position = Vector2.zero;
+                return false;
+#endif
     }
 
 
     public void TriggerExplosion()
     {
         isExploding = true;
-        objectScript.effects.PlayOneShot(objectScript.audioCli[15], 5f);
+        if (objectScript != null && objectScript.effects != null && objectScript.audioCli != null && objectScript.audioCli.Length > 15)
+        {
+            objectScript.effects.PlayOneShot(objectScript.audioCli[15], 5f);
+        }
 
         if (TryGetComponent<Animator>(out Animator animator))
         {
             animator.SetBool("explode", true);
         }
 
-        image.color = Color.red;
-        StartCoroutine(RecoverColor(0.3f));
+        if (image != null)
+        {
+            image.color = Color.red;
+            StartCoroutine(RecoverColor(0.3f));
+        }
+
         StartCoroutine(Vibrate());
         StartCoroutine(WaitBeforeExplode());
     }
@@ -200,11 +266,18 @@ public class ObstaclesControllerScript : MonoBehaviour
             StartCoroutine(FadeOutAndDestroy());
             isFadingOut = true;
 
-            image.color = c;
-            StartCoroutine(RecoverColor(0.5f));
+            if (image != null)
+            {
+                image.color = c;
+                StartCoroutine(RecoverColor(0.5f));
+            }
 
             StartCoroutine(Vibrate());
-            objectScript.effects.PlayOneShot(objectScript.audioCli[14]);
+
+            if (objectScript != null && objectScript.effects != null && objectScript.audioCli != null && objectScript.audioCli.Length > 14)
+            {
+                objectScript.effects.PlayOneShot(objectScript.audioCli[14]);
+            }
         }
     }
 
@@ -264,14 +337,17 @@ public class ObstaclesControllerScript : MonoBehaviour
     IEnumerator RecoverColor(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        image.color = originalColor;
+        if (image != null)
+        {
+            image.color = originalColor;
+        }
     }
 
     IEnumerator Vibrate()
     {
-        #if UNITY_ANDROID
-                Handheld.Vibrate();
-        #endif
+#if UNITY_ANDROID
+        Handheld.Vibrate();
+#endif
         Vector2 originalPosition = rectTransform.anchoredPosition;
         float duration = 0.3f;
         float elpased = 0f;

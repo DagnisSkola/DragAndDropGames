@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 public class WinConditionScript : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class WinConditionScript : MonoBehaviour
     public TextMeshProUGUI carsPlacedText;
     public AudioSource effects;
     public AudioClip winSound;
+    public CameraScript cameraScript;
 
     [Header("Star System")]
     public GameObject[] stars; // Assign 3 star GameObjects
@@ -24,16 +26,32 @@ public class WinConditionScript : MonoBehaviour
 
     [Header("Settings")]
     public int totalCarsToPlace = 12;
+    public float cameraCenterDuration = 0.5f; // Duration to center camera
 
     private int carsPlacedSuccessfully = 0;
     private int carsDestroyed = 0;
     private bool gameWon = false;
+    private Camera mainCamera;
+    private Vector3 originalCameraPosition;
 
     void Start()
     {
         if (winScreen != null)
         {
             winScreen.SetActive(false);
+        }
+
+        // Find camera script if not assigned
+        if (cameraScript == null)
+        {
+            cameraScript = Object.FindFirstObjectByType<CameraScript>();
+        }
+
+        // Get main camera
+        mainCamera = Camera.main;
+        if (mainCamera != null)
+        {
+            originalCameraPosition = mainCamera.transform.position;
         }
 
         // Initialize stars as empty
@@ -99,11 +117,51 @@ public class WinConditionScript : MonoBehaviour
             timerScript.timerIsRunning = false;
         }
 
+        // Disable camera movement
+        if (cameraScript != null)
+        {
+            cameraScript.enabled = false;
+            Debug.Log("Camera controls disabled");
+        }
+
         // Play win sound
         if (effects != null && winSound != null)
         {
             effects.PlayOneShot(winSound);
         }
+
+        // Center camera and show win screen
+        StartCoroutine(CenterCameraAndShowWinScreen());
+    }
+
+    IEnumerator CenterCameraAndShowWinScreen()
+    {
+        if (mainCamera != null)
+        {
+            Vector3 startPos = mainCamera.transform.position;
+            Vector3 centerPos = new Vector3(0f, 0f, startPos.z); // Center at (0, 0)
+
+            float elapsed = 0f;
+
+            // Smoothly move camera to center
+            while (elapsed < cameraCenterDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / cameraCenterDuration;
+
+                // Use smooth easing
+                t = Mathf.SmoothStep(0f, 1f, t);
+
+                mainCamera.transform.position = Vector3.Lerp(startPos, centerPos, t);
+                yield return null;
+            }
+
+            mainCamera.transform.position = centerPos;
+            Debug.Log("Camera centered at (0, 0)");
+        }
+
+        // Small delay before showing win screen
+        yield return new WaitForSeconds(0.2f);
 
         // Show win screen
         if (winScreen != null)
