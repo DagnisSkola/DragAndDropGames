@@ -37,6 +37,13 @@ public class CameraScript : MonoBehaviour
 
     void Start()
     {
+        // Lock orientation to portrait mode only
+        Screen.orientation = ScreenOrientation.Portrait;
+        Screen.autorotateToPortrait = true;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.autorotateToLandscapeLeft = false;
+        Screen.autorotateToLandscapeRight = false;
+
         startZoom = cam.orthographicSize;
         screenBoundries.RecalculateBounds();
         transform.position = screenBoundries.GetClampedCameraPosition(transform.position);
