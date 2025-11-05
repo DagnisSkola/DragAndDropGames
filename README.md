@@ -37,6 +37,7 @@ DragAndDropGames is an educational game series that teaches children problem-sol
 - [x] Create game timer
 - [x] Add animated clouds, vehicles, people, animals, etc.
 - [X] Add flyig obstacles in a city scene
+- [] Replace all mouse inputs with touch
 
 ## 🎯 Gameplay Example
 Players navigate a busy city scene, putting vehicles at their designated spots while avoiding moving obstacles that can destroy their vehicles.

@@ -2065,7 +2065,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b15825f71e696469f199390ca1e28c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxZoom: 540
   minZoom: 150
   pinchZoomSpeed: 0.9
   mouseZoomSpeed: 150
@@ -3674,7 +3673,7 @@ MonoBehaviour:
   threeStarThreshold: 12
   twoStarThreshold: 8
   oneStarThreshold: 4
-  totalCarsToPlace: 1
+  totalCarsToPlace: 12
   cameraCenterDuration: 0.5
 --- !u!114 &1253061425
 MonoBehaviour:

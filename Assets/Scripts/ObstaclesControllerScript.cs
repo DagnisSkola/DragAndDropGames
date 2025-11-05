@@ -87,7 +87,6 @@ public class ObstaclesControllerScript : MonoBehaviour
         if (float.IsInfinity(inputPosition.x) || float.IsInfinity(inputPosition.y) ||
             float.IsNaN(inputPosition.x) || float.IsNaN(inputPosition.y))
         {
-            Debug.LogWarning($"Invalid input position: {inputPosition}");
             return;
         }
 

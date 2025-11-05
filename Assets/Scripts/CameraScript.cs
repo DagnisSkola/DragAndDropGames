@@ -5,7 +5,8 @@ using System.Collections;
 
 public class CameraScript : MonoBehaviour
 {
-    public float maxZoom = 530f, minZoom = 150f;
+    public float minZoom = 150f;
+    private float maxZoom;
     float startZoom;
     public float pinchZoomSpeed = 0.9f, mouseZoomSpeed = 150f;
 
@@ -37,13 +38,6 @@ public class CameraScript : MonoBehaviour
 
     void Start()
     {
-        // Lock orientation to portrait mode only
-        Screen.orientation = ScreenOrientation.Portrait;
-        Screen.autorotateToPortrait = true;
-        Screen.autorotateToPortraitUpsideDown = false;
-        Screen.autorotateToLandscapeLeft = false;
-        Screen.autorotateToLandscapeRight = false;
-
         startZoom = cam.orthographicSize;
         screenBoundries.RecalculateBounds();
         transform.position = screenBoundries.GetClampedCameraPosition(transform.position);
@@ -66,6 +60,7 @@ public class CameraScript : MonoBehaviour
         HandleTouch();
 #endif
 
+        UpdateMaxZoom();
         cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, maxZoom);
         screenBoundries.RecalculateBounds();
         transform.position = screenBoundries.GetClampedCameraPosition(transform.position);
@@ -160,16 +155,30 @@ public class CameraScript : MonoBehaviour
         float elapsed = 0f;
         float initialZoom = cam.orthographicSize;
 
+        float targetZoom = maxZoom;
+
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            cam.orthographicSize = Mathf.Lerp(initialZoom, startZoom, elapsed / duration);
+            cam.orthographicSize = Mathf.Lerp(initialZoom, targetZoom, elapsed / duration);
             screenBoundries.RecalculateBounds();
             transform.position = screenBoundries.GetClampedCameraPosition(transform.position);
             yield return null;
         }
-        cam.orthographicSize = startZoom;
+        cam.orthographicSize = targetZoom;
         screenBoundries.RecalculateBounds();
         transform.position = screenBoundries.GetClampedCameraPosition(transform.position);
+    }
+
+    void UpdateMaxZoom()
+    {
+        if(screenBoundries == null || cam == null)
+            return;
+
+        Rect wb = screenBoundries.worldBounds;
+        float maxZoomHeight = wb.height / 2f;
+        float maxZoomWidth = (wb.width / 2f) / cam.aspect;
+        maxZoom = Mathf.Min(maxZoomHeight, maxZoomWidth);
+
     }
 }
