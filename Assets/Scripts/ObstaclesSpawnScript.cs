@@ -8,6 +8,7 @@ public class ObstaclesSpawnScript : MonoBehaviour
     public Transform spawnPoint;
     public float cloudSpawnInterval = 3f;
     public float obstaclesSpawnInterval = 2f;
+    public ScreenBehaviorScript screenBoundriesScript;
 
     public float minY = -540f;
     public float maxY = 540f;
@@ -20,6 +21,11 @@ public class ObstaclesSpawnScript : MonoBehaviour
 
     void Start()
     {
+        screenBoundriesScript = FindFirstObjectByType<ScreenBehaviorScript>(); ;
+
+        minY = screenBoundriesScript.worldBounds.yMin;
+        maxY = screenBoundriesScript.worldBounds.yMax;
+
         InvokeRepeating(nameof(SpawnCloud), 1f, cloudSpawnInterval);
         InvokeRepeating(nameof(SpawnObstacles), 1f, obstaclesSpawnInterval);
     }

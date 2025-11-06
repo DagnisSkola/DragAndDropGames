@@ -17,6 +17,7 @@ TagManager:
   - Digger
   - Tractor
   - Bomb
+  - Interstitial
   layers:
   - Default
   - TransparentFX
