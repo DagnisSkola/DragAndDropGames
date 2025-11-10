@@ -20,7 +20,8 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
 
     private void Update()
     {
-        if (AdManager.Instance != null && AdManager.Instance.interstitialAd != null)
+        // Only update button state if button exists and hasn't been destroyed
+        if (_interstitialAdButton != null && AdManager.Instance != null && AdManager.Instance.interstitialAd != null)
         {
             _interstitialAdButton.interactable = isReady;
         }
@@ -37,6 +38,7 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
         if (!Advertisement.isInitialized)
         {
             Debug.LogWarning("Tried to load interstitial ad before initialization");
+            return;
         }
 
         Debug.Log("Loading interstitial ad");
@@ -75,7 +77,10 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
     public void OnUnityAdsAdLoaded(String placementId)
     {
         Debug.Log("Interstitial ad loaded!");
-        _interstitialAdButton.interactable = true;
+        if (_interstitialAdButton != null)
+        {
+            _interstitialAdButton.interactable = true;
+        }
         isReady = true;
         OnInterstitialAdReady?.Invoke();
     }
@@ -85,6 +90,7 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
         Debug.LogWarning("Failed to load interstitial ad!");
         LoadAd();
     }
+
     public void OnUnityAdsShowClick(string placementId)
     {
         Debug.LogWarning("User clicked on interstitial ad!");
@@ -100,7 +106,7 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
         }
         else
         {
-            Debug.Log("Interstitial ad skipped or status ir uknown!");
+            Debug.Log("Interstitial ad skipped or status is unknown!");
             LoadAd();
         }
     }
@@ -108,7 +114,7 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
     private IEnumerator SlowDownTimeTemporarily(float seconds)
     {
         Time.timeScale = 0.4f;
-        Debug.Log("Time slowed down to 0.4x for" + seconds + " sec");
+        Debug.Log("Time slowed down to 0.4x for " + seconds + " sec");
         yield return new WaitForSeconds(seconds);
 
         Time.timeScale = 1.0f;
@@ -135,6 +141,6 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(OnInterstitialAdButtonClicked);
         _interstitialAdButton = button;
-        _interstitialAdButton.interactable = false;
+        _interstitialAdButton.interactable = isReady;
     }
 }

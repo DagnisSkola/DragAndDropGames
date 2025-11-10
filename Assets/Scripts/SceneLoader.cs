@@ -9,6 +9,11 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene("CityScene"); // Replace with your scene name if different
     }
 
+    public void LoadGameScene2()
+    {
+        SceneManager.LoadScene("HanojasTornis");
+    }
+
     // Call this from the Quit Game button
     public void QuitGame()
     {
