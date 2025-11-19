@@ -18,6 +18,7 @@ TagManager:
   - Tractor
   - Bomb
   - Interstitial
+  - RewardedButton
   layers:
   - Default
   - TransparentFX

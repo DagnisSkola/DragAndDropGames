@@ -6,10 +6,17 @@ public class AdManager : MonoBehaviour
 {
     public AdsInitializer adsInitializer;
     public InterstitialAd interstitialAd;
+
     [SerializeField] bool turnOffInterstitialAd = false;
-    [SerializeField] bool showAdOnSceneChange = true; // New option to control scene change ads
+    [SerializeField] bool showAdOnSceneChange = true;
     private bool firstAdShown = false;
     private bool isFirstSceneLoad = true;
+
+    public RewardedAds rewardedAds;
+    [SerializeField] bool turnOffRewardedAds = false;
+
+    public BannerAd bannerAd;
+    [SerializeField] bool turnOffBannerAd = false;
 
     public static AdManager Instance { get; private set; }
 
@@ -27,9 +34,7 @@ public class AdManager : MonoBehaviour
         }
 
         Instance = this;
-
         DontDestroyOnLoad(gameObject);
-
         adsInitializer.OnAdsInitialized += HandleAdsInitialized;
     }
 
@@ -49,6 +54,16 @@ public class AdManager : MonoBehaviour
         {
             interstitialAd.OnInterstitialAdReady += HandleInterstitialReady;
             interstitialAd.LoadAd();
+        }
+
+        if (!turnOffRewardedAds)
+        {
+            rewardedAds.LoadAd();
+        }
+
+        if (!turnOffBannerAd)
+        {
+            bannerAd.LoadBanner();
         }
     }
 
@@ -85,7 +100,6 @@ public class AdManager : MonoBehaviour
         }
         catch (UnityException)
         {
-            // Tag doesn't exist or no object with that tag in this scene - that's okay
             Debug.Log("No InterstitialButton found in scene - manual button control unavailable");
         }
 
@@ -95,6 +109,30 @@ public class AdManager : MonoBehaviour
             isFirstSceneLoad = false;
             Debug.Log("First scene loaded - skipping ad");
             return;
+        }
+
+        Debug.Log("Scene Loaded!");
+        HandleAdsInitialized();
+
+        if (rewardedAds == null)
+            rewardedAds = FindFirstObjectByType<RewardedAds>();
+
+        // Fixed: Handle the array returned by FindGameObjectsWithTag
+        try
+        {
+            GameObject[] rewardedButtonObjects = GameObject.FindGameObjectsWithTag("RewardedButton");
+            if (rewardedButtonObjects.Length > 0)
+            {
+                Button rewardedAdButton = rewardedButtonObjects[0].GetComponent<Button>();
+                if (rewardedAds != null && rewardedAdButton != null)
+                {
+                    rewardedAds.SetButton(rewardedAdButton);
+                }
+            }
+        }
+        catch (UnityException)
+        {
+            Debug.Log("No RewardedButton found in scene - rewarded ad button unavailable");
         }
 
         // Show interstitial ad on scene change
