@@ -745,7 +745,7 @@ GameObject:
   - component: {fileID: 108608640}
   m_Layer: 0
   m_Name: RewardedAd
-  m_TagString: Interstitial
+  m_TagString: RewardedButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1347,118 +1347,6 @@ RectTransform:
   m_AnchoredPosition: {x: 122, y: 231}
   m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &162070160
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 162070164}
-  - component: {fileID: 162070163}
-  - component: {fileID: 162070162}
-  - component: {fileID: 162070161}
-  - component: {fileID: 162070166}
-  - component: {fileID: 162070165}
-  m_Layer: 0
-  m_Name: Ads
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &162070161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 162070160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 133ecc1999aba55408732b7f3c20e209, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _androidAdUnityId: Interstitial_Android
-  isReady: 0
-  _interstitialAdButton: {fileID: 1086703495}
---- !u!114 &162070162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 162070160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ecb8e0dedade6c469245a3ad6d0f1bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _androidGameId: 5979301
-  _testMode: 1
---- !u!114 &162070163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 162070160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2e2ba4ec5473504bac62889d3056b7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  adsInitializer: {fileID: 162070162}
-  interstitialAd: {fileID: 162070161}
-  turnOffInterstitialAd: 0
-  showAdOnSceneChange: 1
-  rewardedAds: {fileID: 162070166}
-  turnOffRewardedAds: 0
-  bannerAd: {fileID: 0}
-  turnOffBannerAd: 0
---- !u!4 &162070164
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 162070160}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 50.124798, y: 159.5772, z: -8.792564}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &162070165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 162070160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 758712688f147114c9ee417f837bbd58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &162070166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 162070160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35a454b05d5817941b8818e0206888a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _androidAdUnitId: Rewarded_Android
-  _rewardedButtons: {fileID: 0}
-  flyingObjectManager: {fileID: 0}
 --- !u!1 &281390794
 GameObject:
   m_ObjectHideFlags: 0
@@ -2404,7 +2292,7 @@ GameObject:
   - component: {fileID: 601800897}
   m_Layer: 0
   m_Name: BannerAd
-  m_TagString: Interstitial
+  m_TagString: Banner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3740,9 +3628,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 0, b: 0, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0, g: 0.2390244, b: 1, a: 1}
+    m_PressedColor: {r: 0.0528183, g: 0, b: 1, a: 1}
+    m_SelectedColor: {r: 0, g: 0.17034149, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -5853,4 +5741,3 @@ SceneRoots:
   - {fileID: 294913640}
   - {fileID: 1253061419}
   - {fileID: 11972481}
-  - {fileID: 162070164}
