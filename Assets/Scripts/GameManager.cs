@@ -21,13 +21,21 @@ public class GameManager : MonoBehaviour
         // Create rings on the first tower (smallest on top)
         for (int i = numberOfRings - 1; i >= 0; i--)
         {
-            GameObject ring = Instantiate(ringPrefabs[i]);
+            GameObject ring = Instantiate(ringPrefabs[i], towers[0].transform);
             RingData ringData = ring.GetComponent<RingData>();
             if (ringData == null)
             {
                 ringData = ring.AddComponent<RingData>();
             }
             ringData.Initialize(i);
+
+            // Disable ring collider so it doesn't block tower clicks
+            Collider2D ringCollider = ring.GetComponent<Collider2D>();
+            if (ringCollider != null)
+            {
+                ringCollider.enabled = false;
+            }
+
             towers[0].AddRing(ring);
         }
 
@@ -36,7 +44,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        // Check for mouse click (desktop) or touch (mobile)
+        if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
             HandleClick();
         }
@@ -44,43 +53,83 @@ public class GameManager : MonoBehaviour
 
     void HandleClick()
     {
-        Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+        Vector2 inputPosition;
+
+        // Get position from touch or mouse
+        if (Input.touchCount > 0)
+        {
+            Vector3 touchPos = Input.GetTouch(0).position;
+            touchPos.z = 10f; // Set Z distance from camera
+            inputPosition = mainCamera.ScreenToWorldPoint(touchPos);
+            Debug.Log($"[TOUCH] Touch detected at screen position: {Input.GetTouch(0).position}");
+        }
+        else
+        {
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = 10f; // Set Z distance from camera
+            inputPosition = mainCamera.ScreenToWorldPoint(mousePos);
+            Debug.Log($"[MOUSE] Click detected at screen position: {Input.mousePosition}");
+        }
+
+        Debug.Log($"[INPUT] World position: {inputPosition}");
+
+        RaycastHit2D hit = Physics2D.Raycast(inputPosition, Vector2.zero);
+
+        // Also try this debug to see what's at that position
+        Collider2D[] colliders = Physics2D.OverlapPointAll(inputPosition);
+        Debug.Log($"[OVERLAP] Found {colliders.Length} colliders at click position");
+        foreach (var col in colliders)
+        {
+            Debug.Log($"[OVERLAP] - {col.gameObject.name}");
+        }
 
         if (hit.collider != null)
         {
-            // Check if we clicked on a tower
+            Debug.Log($"[HIT] Hit object: {hit.collider.gameObject.name}");
+            Debug.Log($"[HIT] Has Tower component: {hit.collider.GetComponent<Tower>() != null}");
+
             Tower clickedTower = hit.collider.GetComponent<Tower>();
 
             if (clickedTower != null)
             {
+                Debug.Log($"[TOWER] Clicked on tower, FloatingBox empty: {floatingBox.IsEmpty()}");
+
                 if (floatingBox.IsEmpty())
                 {
-                    // Pick up ring from tower
                     PickUpRing(clickedTower);
                 }
                 else
                 {
-                    // Place ring on tower
                     PlaceRing(clickedTower);
                 }
             }
+            else
+            {
+                Debug.Log("[ERROR] Hit object doesn't have Tower component!");
+            }
+        }
+        else
+        {
+            Debug.Log("[RAYCAST] Raycast hit nothing!");
         }
     }
 
     void PickUpRing(Tower tower)
     {
+        Debug.Log($"[PICKUP] Attempting to pick up ring from tower. Ring count: {tower.GetRingCount()}");
+
         GameObject ring = tower.RemoveRing();
 
         if (ring != null)
         {
+            Debug.Log($"[PICKUP] Successfully removed ring: {ring.name}");
             floatingBox.PlaceRing(ring);
             tower.RefreshAllRingPositions();
-            Debug.Log("Picked up ring from tower");
+            Debug.Log("[PICKUP] Ring placed in floating box");
         }
         else
         {
-            Debug.Log("Tower is empty!");
+            Debug.Log("[PICKUP] Tower is empty!");
         }
     }
 
