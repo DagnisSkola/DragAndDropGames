@@ -41,9 +41,9 @@ DragAndDropGames is an educational game series that teaches children problem-sol
 
 ## 🎯 Gameplay Example
 Players navigate a busy city scene, putting vehicles at their designated spots while avoiding moving obstacles that can destroy their vehicles.
-![City Menu](https://imgur.com/ELE7PTq)
-![City Scene Challenge](https://imgur.com/snVNJDh)
-![Tower of Hanoi](https://imgur.com/aoOxIY8)
+![City Menu](https://i.imgur.com/ELE7PTq.png)
+![City Scene Challenge](https://i.imgur.com/snVNJDh.png)
+![Tower of Hanoi](https://i.imgur.com/aoOxIY8.png)
 
 ## 📱 Controls
 **Drag & Drop:**
