@@ -11,7 +11,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadGameScene2()
     {
-        SceneManager.LoadScene("HanojasTornis");
+        SceneManager.LoadScene("TowerHanoi");
     }
 
     // Call this from the Quit Game button

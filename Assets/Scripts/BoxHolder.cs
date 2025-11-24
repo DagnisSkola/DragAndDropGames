@@ -115,9 +115,13 @@ public class BoxHolder : MonoBehaviour
             boxToMove.SetParent(transform.parent);
             boxes.Add(boxToMove);
 
-            // Position the box
-            float newY = 0.35f + (boxes.Count - 1) * 0.5f;
-            boxToMove.position = new Vector3(transform.parent.position.x, newY, transform.parent.position.z);
+            // Calculate new position RELATIVE to the platform's position
+            float platformY = transform.position.y; // Platform's Y position
+            float stackHeight = 0.35f + (boxes.Count - 1) * 0.5f; // Height above platform
+            float newY = platformY + stackHeight;
+            float holderX = transform.parent.position.x;
+            float holderZ = transform.parent.position.z;
+            boxToMove.position = new Vector3(holderX, newY, holderZ);
 
             Debug.Log("Moved box to: " + transform.parent.name);
 

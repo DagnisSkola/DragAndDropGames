@@ -12,8 +12,8 @@ EditorBuildSettings:
     path: Assets/Scenes/CityScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/HanojasTornis.unity
-    guid: d34d6cd9b6a638648804e6cd9f76c19f
+    path: Assets/Scenes/TowerHanoi.unity
+    guid: 69210e0f2641fc84dbaa0fbf45c11659
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
