@@ -21,8 +21,13 @@ DragAndDropGames is an educational game series that teaches children problem-sol
 - Immersive sound effects and audio feedback
 - Responsive main menu with navigation options
 
-## 📋 To do
+🗼 New Game Mode: Tower of Hanoi
+A classic logic puzzle redesigned with kid-friendly visuals and intuitive drag-and-drop mechanics.
 
+🧩 About Tower of Hanoi
+Tower of Hanoi challenges players to move stacked rings from one pillar to another while following simple rules. Clear visual feedback, and an intuitive interface suitable for younger audiences.
+
+## 📋 To do
 - [x] Create the necessary folders
 - [x] Add necessary assets
 - [x] Add cars on the map
@@ -37,7 +42,8 @@ DragAndDropGames is an educational game series that teaches children problem-sol
 - [x] Create game timer
 - [x] Add animated clouds, vehicles, people, animals, etc.
 - [X] Add flyig obstacles in a city scene
-- [] Replace all mouse inputs with touch
+- [x] Replace all mouse inputs with touch
+- [x] Create tower of hanoi game
 
 ## 🎯 Gameplay Example
 Players navigate a busy city scene, putting vehicles at their designated spots while avoiding moving obstacles that can destroy their vehicles.
@@ -46,6 +52,18 @@ Players navigate a busy city scene, putting vehicles at their designated spots w
 ![Tower of Hanoi](https://i.imgur.com/aoOxIY8.png)
 
 ## 📱 Controls
+
+MOBILE:
+**Drag & Drop:**
+- **Tocuh and drag with finger** - moves cars
+
+**Vehicle Transformation (while dragging):**
+- **Rotation and size buttons on screen** - rotates and resizes vehicles
+
+  **Camera:**
+- **Drag with finger** - moves around camera
+  
+PC:
 **Drag & Drop:**
 - Left mouse button to drag vehicles to parking spots
 
