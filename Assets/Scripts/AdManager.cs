@@ -22,8 +22,18 @@ public class AdManager : MonoBehaviour
 
     private void Awake()
     {
+        // Auto-assign components if not set
         if (adsInitializer == null)
             adsInitializer = FindFirstObjectByType<AdsInitializer>();
+
+        if (interstitialAd == null)
+            interstitialAd = GetComponent<InterstitialAd>();
+
+        if (rewardedAds == null)
+            rewardedAds = GetComponent<RewardedAds>();
+
+        if (bannerAd == null)
+            bannerAd = GetComponent<BannerAd>();
 
         if (Instance != null && Instance != this)
         {
@@ -65,9 +75,7 @@ public class AdManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        adShownThisScene = false; // reset for new scene
-
-        // Delay button setup until all scene objects are active
+        adShownThisScene = false;
         StartCoroutine(SetupButtonsNextFrame());
 
         if (!firstSceneLoad)
@@ -77,7 +85,6 @@ public class AdManager : MonoBehaviour
             return;
         }
 
-        // --- Auto-show interstitial once per scene ---
         if (!turnOffInterstitialAd && interstitialAd != null && interstitialAd.isReady && !adShownThisScene)
         {
             interstitialAd.ShowAd();
@@ -87,7 +94,7 @@ public class AdManager : MonoBehaviour
 
     private IEnumerator SetupButtonsNextFrame()
     {
-        yield return null; // wait one frame for objects to be active
+        yield return null;
 
         // --- Interstitial button ---
         Button interstitialButton = GameObject.FindGameObjectWithTag("Interstitial")?.GetComponent<Button>();
@@ -98,10 +105,5 @@ public class AdManager : MonoBehaviour
         Button rewardedButton = GameObject.FindGameObjectWithTag("RewardedButton")?.GetComponent<Button>();
         if (rewardedAds != null && rewardedButton != null)
             rewardedAds.SetButton(rewardedButton);
-
-        // --- Banner button ---
-        Button bannerButton = GameObject.FindGameObjectWithTag("Banner")?.GetComponent<Button>();
-        if (bannerAd != null && bannerButton != null)
-            bannerAd.SetButton(bannerButton);
     }
 }

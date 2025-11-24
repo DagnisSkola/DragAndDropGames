@@ -1,14 +1,10 @@
 using UnityEngine;
 using UnityEngine.Advertisements;
-using UnityEngine.UI;
 
 public class BannerAd : MonoBehaviour
 {
     [SerializeField] private string _androidAdUnitId = "Banner_Android";
     private string _adUnitId;
-
-    private Button _bannerButton;
-    public bool isBannerVisible = false;
 
     [SerializeField] private BannerPosition _bannerPosition = BannerPosition.BOTTOM_CENTER;
 
@@ -38,17 +34,9 @@ public class BannerAd : MonoBehaviour
 
     private void OnBannerLoaded()
     {
-        Debug.Log("Banner ad loaded!");
-        isBannerVisible = false;
-
-        // Enable button if assigned
-        if (_bannerButton != null)
-            _bannerButton.interactable = true;
-
-        // Auto-show banner immediately
+        Debug.Log("Banner ad loaded! Showing now...");
         ShowBannerAd();
     }
-
 
     private void OnBannerError(string message)
     {
@@ -57,29 +45,16 @@ public class BannerAd : MonoBehaviour
         Invoke(nameof(LoadBanner), 5f);
     }
 
-    public void ShowBannerAd()
+    private void ShowBannerAd()
     {
-        if (isBannerVisible)
+        BannerOptions options = new BannerOptions
         {
-            HideBannerAd();
-        }
-        else
-        {
-            BannerOptions options = new BannerOptions
-            {
-                clickCallback = OnBannerClicked,
-                hideCallback = OnBannerHidden,
-                showCallback = OnBannerShown
-            };
+            clickCallback = OnBannerClicked,
+            hideCallback = OnBannerHidden,
+            showCallback = OnBannerShown
+        };
 
-            Advertisement.Banner.Show(_adUnitId, options);
-        }
-    }
-
-    public void HideBannerAd()
-    {
-        Advertisement.Banner.Hide();
-        isBannerVisible = false;
+        Advertisement.Banner.Show(_adUnitId, options);
     }
 
     private void OnBannerClicked()
@@ -89,31 +64,11 @@ public class BannerAd : MonoBehaviour
 
     private void OnBannerHidden()
     {
-        Debug.Log("Banner is hidden!");
-        isBannerVisible = false;
+        Debug.Log("Banner was hidden!");
     }
 
     private void OnBannerShown()
     {
-        Debug.Log("Banner ad is visible!");
-        isBannerVisible = true;
-    }
-
-    // --- Button Setup ---
-    public void SetButton(Button button)
-    {
-        if (button == null)
-            return;
-
-        _bannerButton = button;
-        _bannerButton.onClick.RemoveAllListeners();
-        _bannerButton.onClick.AddListener(ShowBannerAd);
-
-        // Disable initially until banner loads
-        _bannerButton.interactable = false;
-
-        // Enable immediately if banner is already loaded
-        if (Advertisement.isInitialized)
-            _bannerButton.interactable = true;
+        Debug.Log("Banner ad is now visible!");
     }
 }
