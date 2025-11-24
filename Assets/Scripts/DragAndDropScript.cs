@@ -117,11 +117,22 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
         canvasGro.blocksRaycasts = true;
         canvasGro.alpha = 1.0f;
 
+        // NEW: Check if we dropped on a button
+        bool droppedOnButton = IsOverButton(eventData);
+
         // Check if we need to reset position
-        if (shouldResetPosition)
+        if (shouldResetPosition || droppedOnButton)
         {
-            Debug.Log($"Resetting {gameObject.name} to position: {resetToPosition}");
-            rectTra.anchoredPosition = resetToPosition;
+            if (droppedOnButton)
+            {
+                Debug.Log($"{gameObject.name} dropped on button! Resetting to spawn.");
+                rectTra.anchoredPosition = originalStartPosition;
+            }
+            else
+            {
+                Debug.Log($"Resetting {gameObject.name} to position: {resetToPosition}");
+                rectTra.anchoredPosition = resetToPosition;
+            }
             shouldResetPosition = false;
         }
         else if (objectScr.rightPlace)
@@ -138,6 +149,25 @@ public class DragAndDropScript : MonoBehaviour, IPointerDownHandler, IBeginDragH
         }
 
         objectScr.rightPlace = false;
+    }
+
+    // NEW: Check if the car is over a button
+    private bool IsOverButton(PointerEventData eventData)
+    {
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            // Check if we hit a button
+            if (result.gameObject.GetComponent<UnityEngine.UI.Button>() != null)
+            {
+                Debug.Log($"Detected button: {result.gameObject.name}");
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // Call this from DropPlaceScript when wrong placement detected
