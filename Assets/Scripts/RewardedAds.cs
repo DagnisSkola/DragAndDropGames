@@ -11,6 +11,7 @@ public class RewardedAds : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowLi
     private bool _isReady = false;
     private Button _rewardedButton;
     public FlyingObjectManager flyingObjectManager;
+    public int movesToRemove = 15;
 
     private void Awake()
     {
@@ -86,6 +87,13 @@ public class RewardedAds : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowLi
 
             if (flyingObjectManager != null)
                 flyingObjectManager.DestroyAllFlyingObjects();
+
+            // Remove moves from GameManager
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.RemoveMoves(movesToRemove);
+                Debug.Log($"Removed {movesToRemove} moves as reward!");
+            }
 
             if (_rewardedButton != null)
                 _rewardedButton.interactable = false;

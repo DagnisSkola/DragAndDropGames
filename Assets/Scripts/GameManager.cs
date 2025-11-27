@@ -56,6 +56,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void RemoveMoves(int amount)
+    {
+        if (gameActive)
+        {
+            moveCount = Mathf.Max(0, moveCount - amount);
+            UpdateMovesUI();
+        }
+    }
+
     public void CheckWinCondition(BoxHolder holder)
     {
         if (!gameActive) return;

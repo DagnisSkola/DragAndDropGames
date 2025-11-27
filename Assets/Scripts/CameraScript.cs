@@ -80,10 +80,19 @@ public class CameraScript : MonoBehaviour
 
     void HandleTouch()
     {
-        // FIXED: Changed == -1 to == 0
         if (Input.touchCount == 0)
             return;
 
+        // Handle pinch zoom with 2 fingers
+        if (Input.touchCount >= 2)
+        {
+            HandlePinch();
+            isTouchPaning = false;
+            panFingerId = -1;
+            return;
+        }
+
+        // Handle single touch panning
         Touch t = Input.GetTouch(0);
         if (IsTouchingOverUIButton(t.position))
             return;
@@ -117,6 +126,7 @@ public class CameraScript : MonoBehaviour
             panFingerId = -1;
         }
     }
+
     bool IsTouchingOverUIButton(Vector2 touchPos)
     {
         PointerEventData pointerData = new PointerEventData(EventSystem.current);
@@ -134,6 +144,7 @@ public class CameraScript : MonoBehaviour
         }
         return false;
     }
+
     void HandlePinch()
     {
         Touch t0 = Input.GetTouch(0);
@@ -149,6 +160,7 @@ public class CameraScript : MonoBehaviour
         float worldPerPixel = (2f * cam.orthographicSize) / Screen.height;
         return new Vector3(screenDelta.x * worldPerPixel, screenDelta.y * worldPerPixel, 0f);
     }
+
     IEnumerator ResetZoomSmooth()
     {
         float duration = 0.25f;
@@ -172,7 +184,7 @@ public class CameraScript : MonoBehaviour
 
     void UpdateMaxZoom()
     {
-        if(screenBoundries == null || cam == null)
+        if (screenBoundries == null || cam == null)
             return;
 
         Rect wb = screenBoundries.worldBounds;
